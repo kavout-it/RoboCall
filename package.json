@@ -1,0 +1,45 @@
+{
+  "private": true,
+  "author": "Shurong.Wang <shurong.wang@jll.com>",
+  "scripts": {
+    "build:dev": "cross-env UMI_ENV=_dev umi build",
+    "build:prod": "cross-env UMI_ENV=_prod umi build",
+    "build:uat": "cross-env UMI_ENV=_uat umi build",
+    "dev": "cross-env UMI_ENV=_dev umi dev",
+    "postinstall": "umi setup",
+    "local": "cross-env UMI_ENV=_local umi dev",
+    "prod": "cross-env UMI_ENV=_prod umi dev",
+    "setup": "umi setup",
+    "start": "npm run local",
+    "uat": "cross-env UMI_ENV=_uat umi dev"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,less}": [
+      "umi lint"
+    ]
+  },
+  "dependencies": {
+    "ahooks": "^3.7.8",
+    "classnames": "^2.3.2",
+    "cross-env": "^7.0.3",
+    "crypto-js": "^4.1.1",
+    "currency.js": "^2.0.4",
+    "dayjs": "^1.11.9",
+    "umi": "^4.0.80",
+    "zustand": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "@umijs/lint": "^4.0.80",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "eslint": "^8.48.0",
+    "lint-staged": "^14.0.1",
+    "prettier": "^2.8.8",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "prettier-plugin-packagejson": "^2.4.3",
+    "stylelint": "^15.10.3",
+    "typescript": "^5.0.3"
+  }
+}
