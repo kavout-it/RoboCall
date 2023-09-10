@@ -20,11 +20,13 @@
   },
   "dependencies": {
     "ahooks": "^3.7.8",
+    "axios": "^1.5.0",
     "classnames": "^2.3.2",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "currency.js": "^2.0.4",
     "dayjs": "^1.11.9",
+    "qs": "^6.11.2",
     "umi": "^4.0.80",
     "zustand": "^4.4.1"
   },

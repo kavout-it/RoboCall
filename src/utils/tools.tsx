@@ -203,14 +203,48 @@ export function dateRangeToDayjs(
   return [dayjs(start, dateFormat), dayjs(end, dateFormat)];
 }
 
-export function getFirstRoute() {
-  const url = location.href;
-  const urlParts = url.split('/');
-  return urlParts[3];
-}
-
 export const encrypt = (text: string, secretKey = 'hackathon') =>
   CryptoJS.AES.encrypt(text, secretKey).toString();
 
 export const decrypt = (text: string, secretKey = 'hackathon') =>
   CryptoJS.AES.decrypt(text, secretKey).toString(CryptoJS.enc.Utf8);
+
+/**
+ * @description 获取浏览器默认语言
+ * @return string
+ */
+export function getBrowserLang() {
+  const browserLang = navigator.language
+    ? navigator.language
+    : navigator.browserLanguage;
+  let defaultBrowserLang = '';
+  if (
+    browserLang.toLowerCase() === 'cn' ||
+    browserLang.toLowerCase() === 'zh' ||
+    browserLang.toLowerCase() === 'zh-cn'
+  ) {
+    defaultBrowserLang = 'zh';
+  } else {
+    defaultBrowserLang = 'en';
+  }
+  return defaultBrowserLang;
+}
+
+export function isId(value: any) {
+  return (
+    (typeof value === 'string' && value.trim()) ||
+    (typeof value === 'number' && !isNaN(value))
+  );
+}
+
+const sizeMappings: Record<string, number> = {
+  KB: 1024,
+  MB: 1024 * 1024,
+  GB: 1024 * 1024 * 1024,
+};
+
+export const parseMaxsize = (maxSize: string) => {
+  const [num, unit] = maxSize.split(' ');
+  const count = parseInt(num) || 0;
+  return count * (sizeMappings[unit] || 1);
+};

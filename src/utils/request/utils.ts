@@ -2,15 +2,29 @@
 /**
  * 请求相关工具函数
  */
+import { ResultData } from '@/typings/request';
+import { ApiCode } from './config';
+import showMessage from './message';
 
-import { API_CODE, ResponseStructure } from '@/constants/request';
-
-export const isTokenError = (errorCode: string) =>
+/**
+ * 是否 token 相关的错误
+ */
+export const isTokenError = (apiCode: ApiCode) =>
   [
-    API_CODE.TOKEN_EMPTY,
-    API_CODE.TOKEN_EXPIRED,
-    API_CODE.TOKEN_DUPLICATE,
-  ].includes(errorCode);
+    ApiCode.TOKEN_EMPTY,
+    ApiCode.TOKEN_EXPIRED,
+    ApiCode.TOKEN_DUPLICATE,
+  ].includes(apiCode);
+
+/**
+ * 重新登录
+ */
+export const reLogin = () => {
+  const LOGIN_PATH = '/login';
+  localStorage.removeItem('requestToken');
+  sessionStorage.setItem('redirectUrl', window.location.href);
+  window.location.replace(LOGIN_PATH);
+};
 
 /**
  * @description 通用文件下载函数
@@ -53,51 +67,6 @@ export const downloadFile = async (
   window.URL.revokeObjectURL(blobURL);
 };
 
-export function isSafari() {
-  const ua = navigator.userAgent;
-  return ua.includes('Safari') && ua.indexOf('Chrome') === -1;
-}
-
-/**
- * @description 获取浏览器默认语言
- * @return string
- */
-export function getBrowserLang() {
-  const browserLang = navigator.language
-    ? navigator.language
-    : navigator.browserLanguage;
-  let defaultBrowserLang = '';
-  if (
-    browserLang.toLowerCase() === 'cn' ||
-    browserLang.toLowerCase() === 'zh' ||
-    browserLang.toLowerCase() === 'zh-cn'
-  ) {
-    defaultBrowserLang = 'zh';
-  } else {
-    defaultBrowserLang = 'en';
-  }
-  return defaultBrowserLang;
-}
-
-export function isId(value: any) {
-  return (
-    (typeof value === 'string' && value.trim()) ||
-    (typeof value === 'number' && !isNaN(value))
-  );
-}
-
-const sizeMappings: Record<string, number> = {
-  KB: 1024,
-  MB: 1024 * 1024,
-  GB: 1024 * 1024 * 1024,
-};
-
-export const parseMaxsize = (maxSize: string) => {
-  const [num, unit] = maxSize.split(' ');
-  const count = parseInt(num) || 0;
-  return count * (sizeMappings[unit] || 1);
-};
-
 export const uploadFile = async (
   url: string,
   file: File,
@@ -105,7 +74,7 @@ export const uploadFile = async (
 ) => {
   const fd = new FormData();
   fd.append('file', file);
-  return new Promise<ResponseStructure>((resolve, reject) => {
+  return new Promise<ResultData>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     if (xhr.upload) {
@@ -124,7 +93,7 @@ export const uploadFile = async (
     xhr.withCredentials = true;
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
-        const response = JSON.parse(xhr.response || '{}') as ResponseStructure;
+        const response = JSON.parse(xhr.response || '{}') as ResultData;
         const success =
           xhr.status >= 200 && xhr.status < 300 && response.success;
         if (success) {
@@ -137,4 +106,68 @@ export const uploadFile = async (
     };
     xhr.send(fd);
   });
+};
+
+/**
+ * api 提示信息
+ */
+export const handleMessage = (response: any) => {
+  const { data, config } = response;
+  // Token错误
+  if (isTokenError(data.errorCode)) {
+    return reLogin();
+  }
+
+  // 内部错误
+  if (data.errorCode === ApiCode.ERROR) {
+    location.replace('/403');
+    // return Promise.reject(data);
+    return data;
+  }
+
+  // 禁止访问
+  if (data.errorCode === ApiCode.FORBIDDEN) {
+    location.replace('/403');
+    // return Promise.reject(data);
+    return data;
+  }
+
+  // 其他错误
+  if (!config.headers.noMessage) {
+    const { errorMessage } = data;
+    // const firstMessage = errorMessage.includes(';')
+    //   ? errorMessage.split(';')[0]
+    //   : errorMessage;
+    // showMessage(firstMessage || '请求失败，请稍后重试!');
+    showMessage(errorMessage || '请求失败，请稍后重试!');
+  }
+};
+
+/**
+ * 文件下载提示信息
+ */
+export const downloadMessage = (data: any) => {
+  if (isTokenError(data.errorCode)) {
+    return reLogin();
+  }
+  showMessage(data.errorMessage || '请求失败，请稍后重试!');
+  return Promise.resolve(data);
+};
+
+/**
+ * 生成时间戳随机 ID
+ */
+export const genStampID = () => {
+  const randomString = (len = 32) => {
+    const chars = 'abcdefhijkmnprstwxyz';
+    const maxPos = chars.length;
+    let rnds = '';
+    for (let i = 0; i < len; i++) {
+      rnds += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return rnds;
+  };
+  const timestamp = new Date().getTime();
+  const rndStr = randomString(5);
+  return timestamp + '_' + rndStr;
 };
