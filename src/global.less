@@ -39,3 +39,29 @@ body,
   overflow: hidden;
   clip: rect(1px, 1px, 1px, 1px);
 }
+
+// chatui-theme.css
+/* stylelint-disable selector-class-pattern */
+body.S--wide {
+  background-image: url('//img.alicdn.com/tfs/TB1gYlCh7T2gK0jSZPcXXcKkpXa-1440-900.jpg');
+}
+
+:root {
+  --brand-1: #1877ff;
+  --brand-2: #4692ff;
+  --brand-3: #bad6ff;
+}
+
+.ChatApp,
+.MessageContainer,
+.Navbar,
+.Message .Bubble,
+.QuickReplies,
+.ChatFooter {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.QuickReply.highlight {
+  border-color: #4a90e2;
+}
