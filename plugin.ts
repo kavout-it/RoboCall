@@ -31,6 +31,11 @@ export default (api: IApi) => {
         type: 'text/css',
         href: '//g.alicdn.com/chatui/sdk-v2/0.3.2/sdk.css',
       },
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: './chatui-theme.css',
+      },
     ];
   });
   // 向 HTML 的 <head> 元素里添加 script 标签
