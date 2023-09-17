@@ -43,6 +43,11 @@ export default (api: IApi) => {
         src: '//g.alicdn.com/chatui/extensions/0.1.3/isv-parser.js',
       },
       {
+        // Fix icons/2.0.2 中删除部分 svg
+        src: '//g.alicdn.com/chatui/icons/0.3.0/index.js',
+        async: true,
+      },
+      {
         src: '//g.alicdn.com/chatui/icons/2.0.2/index.js',
         async: true,
       },
