@@ -1,4 +1,4 @@
 export default [
-  { path: "/", component: "index" },
-  { path: "/docs", component: "docs" },
+  { path: '/', component: 'index' },
+  { path: '/report', component: 'report/report' },
 ];

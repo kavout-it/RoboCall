@@ -8,8 +8,6 @@ const isLocal = process.env.UMI_ENV?.startsWith('_local');
 
 export default defineConfig({
   title: 'RoboCall',
-  styles: [],
-  headScripts: [],
   routes,
   proxy,
   ...plugins,
@@ -17,6 +15,7 @@ export default defineConfig({
   hash: !isLocal,
   jsMinifier: 'esbuild',
   npmClient: 'pnpm',
+  icons: {},
 
   // 扩展 babel 插件
   extraBabelPlugins: isProd ? ['transform-remove-console'] : [],
