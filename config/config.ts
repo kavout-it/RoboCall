@@ -3,6 +3,9 @@ import plugins from './plugins';
 import proxy from './proxy';
 import routes from './routes';
 
+/**
+ * 构建时配置
+ */
 const isProd = process.env.UMI_ENV?.startsWith('_prd');
 const isLocal = process.env.UMI_ENV?.startsWith('_local');
 
@@ -15,7 +18,10 @@ export default defineConfig({
   hash: !isLocal,
   jsMinifier: 'esbuild',
   npmClient: 'pnpm',
-  icons: {},
+  icons: { autoInstall: {} },
+  externals: {
+    // '@chatui/core': 'ChatUI',
+  },
 
   // 扩展 babel 插件
   extraBabelPlugins: isProd ? ['transform-remove-console'] : [],

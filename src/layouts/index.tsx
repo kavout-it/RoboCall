@@ -3,7 +3,7 @@ import styles from './index.less';
 
 export default function Layout() {
   return (
-    <div className={styles.app}>
+    <div className={styles.layouts}>
       <Outlet />
     </div>
   );
