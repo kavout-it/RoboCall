@@ -10,7 +10,7 @@ const isProd = process.env.UMI_ENV?.startsWith('_prd');
 const isLocal = process.env.UMI_ENV?.startsWith('_local');
 
 export default defineConfig({
-  title: 'RoboCall',
+  title: 'ChatUI',
   routes,
   proxy,
   ...plugins,
